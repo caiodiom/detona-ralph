@@ -22,7 +22,7 @@ const state = {
   isPlaying: true, 
 };
 alert("Não deixe o Ralf detonar tudo!");
-alert("Você tem 30 segundos e 3 vidas, tente acerta=lo o máximo de vezes que conseguir.");
+alert("Você tem 30 segundos e 3 vidas, tente acerta-lo o máximo de vezes que conseguir.");
 alert("Clique Ok e o jogo vai começar.")
 
 
