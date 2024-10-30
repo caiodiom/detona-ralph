@@ -48,7 +48,7 @@
 
 .square {
     
-    height: 150px;
+    height: 140px;
     width: 150px;
     border: 1px solid black;
     background-color: #80e7c5;
@@ -142,7 +142,7 @@ footer a:hover {
     @media(max-width: 430px) {
 
         .body {
-            
+            line-height:300px;
         }
         .menu {
             
