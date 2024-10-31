@@ -5,10 +5,9 @@ const state = {
     timeLeft: document.querySelector("#time-left"),
     score: document.querySelector("#score"),
     lifeLeft: document.querySelector("#live-left"),
-
   },
   values: {
-    gameVelocity: 0,
+    gameVelocity: 900, 
     hitPosition: 0,
     result: 0,
     curretTime: 30,
@@ -19,61 +18,56 @@ const state = {
     timerId: setInterval(randomSquare, 800),
     countDownTimerId: setInterval(countDown, 1000),
   },
-  isPlaying: true, 
+  isPlaying: true,
 };
+
 alert("Não deixe o Ralf detonar tudo!");
 alert("Você tem 30 segundos e 3 vidas, tente acerta-lo o máximo de vezes que conseguir.");
-alert("Clique Ok e o jogo vai começar.")
-
+alert("Clique Ok e o jogo vai começar.");
 
 function lifeDown() {
-  if (!state.isPlaying) return; 
+  if (!state.isPlaying) return;
 
   state.values.curretLife--;
   state.view.lifeLeft.textContent = state.values.curretLife;
 
   if (state.values.curretLife === 0) {
-    playSound("over");
-    setTimeout(() => {
-      alert("Game Over! Você perdeu todas as vidas, O seu resultado foi: " + state.values.result);
-      clearInterval(state.actions.countDownTimerId);
-      clearInterval(state.actions.timerId);
-
-
-      
-      document.body.classList.add("no-click");
-      state.isPlaying = false;
-    }, 100);
+    endGame("Game Over! Você perdeu todas as vidas, O seu resultado foi: " + state.values.result);
   }
-}
-
-
-
-function preventClick(event) {
-  event.preventDefault();
-  event.stopPropagation();
 }
 
 function countDown() {
   state.values.curretTime--;
   state.view.timeLeft.textContent = state.values.curretTime;
+
   
+  if (state.values.curretTime === 15) {
+    updateGameVelocity(600); 
+  } else if (state.values.curretTime === 5) {
+    updateGameVelocity(400); 
+  }
 
   if (state.values.curretTime <= 0) {
-
-   
-    playSound("over");
-      setTimeout(() => {
-        alert("Game Over! O tempo acabou, O seu resultado foi: " + state.values.result);
-        clearInterval(state.actions.countDownTimerId);
-        clearInterval(state.actions.timerId);
-        
-    
-        document.body.classList.add("no-click");
-        state.isPlaying = false;
-      }, 100);
-     
+    endGame("Game Over! O tempo acabou, O seu resultado foi: " + state.values.result);
   }
+}
+
+function updateGameVelocity(newVelocity) {
+  clearInterval(state.actions.timerId); 
+  state.values.gameVelocity = newVelocity; 
+  state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity); 
+}
+
+function endGame(message) {
+  playSound("over");
+  setTimeout(() => {
+    alert(message);
+    clearInterval(state.actions.countDownTimerId);
+    clearInterval(state.actions.timerId);
+    state.isPlaying = false;
+
+    state.view.footer.style.pointerEvents = 'auto';
+  }, 100);
 }
 
 function playSound(audioName) {
@@ -99,29 +93,22 @@ function randomSquare() {
   state.values.hitPosition = randomSquare.id;
 }
 
-function moveEnemy() {
-  state.values.timerId = setInterval(randomSquare, state.values.gameVelocity);
-
-  
-}
-
 function addListenerHitBox() {
   state.view.squares.forEach((square) => {
     square.addEventListener("mousedown", () => {
+      if (!state.isPlaying) return;
+
       if (square.id === state.values.hitPosition) {
         state.values.result++;
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
         playSound("hit");
-        state.values.wrongClicks = 0; 
-
-        
+        state.values.wrongClicks = 0;
       } else {
-        state.values.wrongClicks++; 
-        if (state.values.wrongClicks % 1 === 0 && state.values.wrongClicks > 0) {
+        state.values.wrongClicks++;
+        if (state.values.wrongClicks > 0) {
           lifeDown();
           playSound2("error2");
-          
         }
       }
     });
@@ -130,8 +117,7 @@ function addListenerHitBox() {
 
 function initialize() {
   addListenerHitBox();
-  
+  state.view.footer.style.pointerEvents = 'none';
 }
-
 
 initialize();
