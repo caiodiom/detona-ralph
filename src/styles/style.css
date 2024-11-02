@@ -99,7 +99,7 @@ footer a:hover {
 
 
 
-    @media(max-width: 920px) {
+    @media(max-width: 932px) {
        
         
         body {
@@ -107,7 +107,7 @@ footer a:hover {
         }
 
         .panel {
-            margin-top: 2px;
+            margin-top: 1%;
         }
 
         .menu {
@@ -129,7 +129,7 @@ footer a:hover {
         
         .square {
         
-        height: 95px;
+        height: 80px;
         width: 95px;
 
         }
@@ -177,6 +177,14 @@ footer a:hover {
 
         }
 
+
+    }
+
+    @media(max-width: 375px) {
+
+        .panel {
+            margin-top: 3rem;
+        }
 
     }
     
